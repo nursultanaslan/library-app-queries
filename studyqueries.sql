@@ -193,11 +193,12 @@ select * from book_items bi;
 insert into book_items (book_id, book_status_id)
 values (2, 1);
 insert into book_items (book_id, book_status_id)
-values (7,2);
+values (8,2);
 
 select * from book_items bi
 inner join books b 
 on bi.book_id = b.id;
+
 
 --Book Status tablosuna statuslar eklendi.
 insert into book_status (status)
@@ -240,9 +241,12 @@ insert into borrows (borrow_date, due_date, renewal_count, bookitem_id,user_id )
 values ('2025-08-09', '2025-08-24', 0, 19, 6);
 insert into borrows (borrow_date, due_date, return_date, renewal_count, bookitem_id,user_id )
 values ('2025-08-01', '2025-08-16', '2025-08-30', 0, 20, 6);
+insert into borrows (borrow_date, due_date, return_date, renewal_count, bookitem_id,user_id )
+values ('2025-05-15', '2025-05-30', '2025-05-30', 0, 25, 6 );
+
 select * from borrows b ;
 
-
+select * from users;
 -- id'si 1'den 4'e kadar olan borrow'lar silindi
 delete from borrows b
 where b.id=4;
@@ -345,6 +349,18 @@ left join borrows b on u.id = b.user_id
 where b.id is null;
 
 
+--her kategoriden ödünç verilen kitapların sayısı , ilk 3ü, kitabın title'ına gore
+
+select 
+c.name,
+count(br.id) as total_borrows
+from borrows br 
+join book_items bi on br.bookitem_id = bi.id 
+join books b on b.id = bi.book_id 
+join categories c on b.category_id = c.id
+group by c.name
+order by total_borrows desc
+limit 3;
 
 
 
